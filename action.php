@@ -3,38 +3,20 @@
  * Plugin for a nicer Admin main page with some layout
  *
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
- * @author     Håkan Sandell <hakan.sandell@home.se>
+ * @author     HÃ¥kan Sandell <hakan.sandell@home.se>
  */
 
 // must be run within Dokuwiki
-if (!defined('DOKU_INC'))
-    die();
-
-if (!defined('DOKU_PLUGIN'))
-    define('DOKU_PLUGIN', DOKU_INC . 'lib/plugins/');
-
+if (!defined('DOKU_INC')) die();
+if (!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN', DOKU_INC . 'lib/plugins/');
 require_once (DOKU_PLUGIN . 'action.php');
 
 class action_plugin_adminhomepage extends DokuWiki_Action_Plugin {
 
     /**
-     * return some info
-     */
-    function getInfo() {
-    return array (
-            'author' => 'H&aring;kan Sandell',
-            'email'  => 'hakan.sandell@home.se',
-            'date'   => @file_get_contents(DOKU_PLUGIN.'adminhomepage/VERSION'),
-            'name'   => 'AdminHomePage',
-            'desc'   => 'Replacement for "Admin" page with better usability',
-            'url'    => 'http://www.dokuwiki.org/plugin:adminhomepage'
-        );
-    }
-
-    /**
      * register the eventhandlers
      */
-    function register(& $controller) {
+    function register(Doku_Event_Handler $controller) {
         $controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, 'handle_act_preprocess');
         $controller->register_hook('TPL_ACT_UNKNOWN', 'BEFORE', $this, 'handle_act_unknown');
     }
@@ -42,7 +24,7 @@ class action_plugin_adminhomepage extends DokuWiki_Action_Plugin {
     /**
      * Looks for admin action, if found the name is changed so TPL_ACT_UNKNOWN is raised
      */
-    function handle_act_preprocess(& $event, $param) {
+    function handle_act_preprocess(&$event, $param) {
         if (($event->data == 'admin') && empty($_REQUEST['page']) && (act_permcheck($event->data) == 'admin')) {
             $event->data = 'adminhomepage';
             $event->stopPropagation();
@@ -53,7 +35,7 @@ class action_plugin_adminhomepage extends DokuWiki_Action_Plugin {
     /**
      * Catches the "unknown" event "adminhomepage" and outputs the alternative admin main page
      */
-    function handle_act_unknown(& $event, $param) {
+    function handle_act_unknown(&$event, $param) {
         if ($event->data == 'adminhomepage') {
             $this->_html_admin();
             $event->stopPropagation();

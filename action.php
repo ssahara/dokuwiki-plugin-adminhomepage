@@ -61,70 +61,70 @@ class action_plugin_adminhomepage extends DokuWiki_Action_Plugin {
                             );
         }
 
-    // data security check
-    // simple check if the 'savedir' is relative and accessible when appended to DOKU_URL
-    // it verifies either:
-    //   'savedir' has been moved elsewhere, or
-    //   has protection to prevent the webserver serving files from it
-    if (substr($conf['savedir'],0,2) == './'){
-        echo '<a style="border:none; float:right;"
+        // data security check
+        // simple check if the 'savedir' is relative and accessible when appended to DOKU_URL
+        // it verifies either:
+        //   'savedir' has been moved elsewhere, or
+        //   has protection to prevent the webserver serving files from it
+        if (substr($conf['savedir'],0,2) == './'){
+            echo '<a style="border:none; float:right;"
                 href="http://www.dokuwiki.org/security#web_access_security">
                 <img src="'.DOKU_URL.$conf['savedir'].'/security.png" alt="Your data directory seems to be protected properly."
                 onerror="this.parentNode.style.display=\'none\'" /></a>';
-    }
+        }
 
         print p_locale_xhtml('admin');
 
         if ($INFO['isadmin']){
-        ptln('<ul class="admin_tasks">');
+            ptln('<ul class="admin_tasks">');
 
-        if($menu['usermanager'] && $auth && $auth->canDo('getUsers')){
-            ptln('  <li class="admin_usermanager"><div class="li">'.
+            if($menu['usermanager'] && $auth && $auth->canDo('getUsers')){
+                ptln('  <li class="admin_usermanager"><div class="li">'.
                     '<a href="'.wl($ID, array('do' => 'admin','page' => 'usermanager')).'">'.
                     $menu['usermanager']['prompt'].'</a></div></li>');
-        }
-        unset($menu['usermanager']);
+            }
+            unset($menu['usermanager']);
 
-        if($menu['acl']){
-            ptln('  <li class="admin_acl"><div class="li">'.
+            if($menu['acl']){
+                ptln('  <li class="admin_acl"><div class="li">'.
                     '<a href="'.wl($ID, array('do' => 'admin','page' => 'acl')).'">'.
                     $menu['acl']['prompt'].'</a></div></li>');
-        }
-        unset($menu['acl']);
+            }
+            unset($menu['acl']);
 
-        if($menu['extension']){
-            ptln('  <li class="admin_plugin"><div class="li">'.
+            if($menu['extension']){
+                ptln('  <li class="admin_plugin"><div class="li">'.
                     '<a href="'.wl($ID, array('do' => 'admin','page' => 'extension')).'">'.
                     $menu['extension']['prompt'].'</a></div></li>');
-        }
-        unset($menu['extension']);
+            }
+            unset($menu['extension']);
 
-        if($menu['config']){
-            ptln('  <li class="admin_config"><div class="li">'.
+            if($menu['config']){
+                ptln('  <li class="admin_config"><div class="li">'.
                     '<a href="'.wl($ID, array('do' => 'admin','page' => 'config')).'">'.
                     $menu['config']['prompt'].'</a></div></li>');
+            }
+            unset($menu['config']);
         }
-        unset($menu['config']);
-    }
         ptln('</ul>');
 
 
         // Manager Tasks
-    ptln('<ul class="admin_tasks">');
+        ptln('<ul class="admin_tasks">');
 
-    if($menu['revert']){
-        ptln('  <li class="admin_revert"><div class="li">'.
+        if($menu['revert']){
+            ptln('  <li class="admin_revert"><div class="li">'.
                 '<a href="'.wl($ID, array('do' => 'admin','page' => 'revert')).'">'.
                 $menu['revert']['prompt'].'</a></div></li>');
-    }
-    unset($menu['revert']);
+        }
+        unset($menu['revert']);
 
-    if($menu['popularity']){
-        ptln('  <li class="admin_popularity"><div class="li">'.
+        if($menu['popularity']){
+            ptln('  <li class="admin_popularity"><div class="li">'.
                 '<a href="'.wl($ID, array('do' => 'admin','page' => 'popularity')).'">'.
                 $menu['popularity']['prompt'].'</a></div></li>');
-    }
-    unset($menu['popularity']);
+        }
+        unset($menu['popularity']);
 
         ptln('</ul>');
 
@@ -137,16 +137,17 @@ class action_plugin_adminhomepage extends DokuWiki_Action_Plugin {
 
 
         // print the rest as sorted list
-    if(count($menu)){
-        usort($menu, 'p_sort_modes');
-        // output the menu
-        print p_locale_xhtml('adminplugins');
-        ptln('<ul>');
-        foreach ($menu as $item) {
-            if (!$item['prompt']) continue;
-            ptln('  <li><div class="li"><a href="'.wl($ID, 'do=admin&amp;page='.$item['plugin']).'">'.$item['prompt'].'</a></div></li>');
+        if(count($menu)){
+            usort($menu, 'p_sort_modes');
+            // output the menu
+            print p_locale_xhtml('adminplugins');
+            ptln('<ul>');
+            foreach ($menu as $item) {
+                if (!$item['prompt']) continue;
+                ptln('  <li><div class="li"><a href="'.wl($ID, 'do=admin&amp;page='.$item['plugin']).'">'.$item['prompt'].'</a></div></li>');
+            }
+            ptln('</ul>');
         }
-        ptln('</ul>');
     }
 
 }

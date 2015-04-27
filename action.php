@@ -44,11 +44,7 @@ class action_plugin_adminhomepage extends DokuWiki_Action_Plugin {
     }
 
     function _html_admin(){
-        global $ID;
-        global $INFO;
-        global $lang;
-        global $conf;
-        global $auth;
+        global $ID, $INFO, $lang, $conf, $auth;
 
         // build menu of admin functions from the plugins that handle them
         $pluginlist = plugin_list('admin');
@@ -65,52 +61,92 @@ class action_plugin_adminhomepage extends DokuWiki_Action_Plugin {
                             );
         }
 
-        // check if UserManager available
-        $usermanageravailable = true;
-        if (!isset($auth)) {
-          $usermanageravailable = false;
-        } else if (!$auth->canDo('getUsers')) {
-          $usermanageravailable = false;
-        }
+    // data security check
+    // simple check if the 'savedir' is relative and accessible when appended to DOKU_URL
+    // it verifies either:
+    //   'savedir' has been moved elsewhere, or
+    //   has protection to prevent the webserver serving files from it
+    if (substr($conf['savedir'],0,2) == './'){
+        echo '<a style="border:none; float:right;"
+                href="http://www.dokuwiki.org/security#web_access_security">
+                <img src="'.DOKU_URL.$conf['savedir'].'/security.png" alt="Your data directory seems to be protected properly."
+                onerror="this.parentNode.style.display=\'none\'" /></a>';
+    }
 
-        // output main tasks
-        ptln('<h1>'.$this->getLang('pageheader').'</h1>');
-        ptln('<div id="admin__maintable">');
-        ptln('  <div id="admin__tasks">');
-        if ($INFO['isadmin']) {
-            if ($usermanageravailable) {
-                ptln('    <div id="admin__usermanager"><a href="'.wl($ID, 'do=admin&amp;page=usermanager').'">'.$menu[usermanager]['prompt'].'</a></div>');
-            }
-            ptln('    <div id="admin__acl"><a href="'.wl($ID, 'do=admin&amp;page=acl').'">'.$menu['acl']['prompt'].'</a></div>');
-            ptln('    <div id="admin__plugin"><a href="'.wl($ID, 'do=admin&amp;page=plugin').'">'.$menu['plugin']['prompt'].'</a></div>');
-            ptln('    <div id="admin__config"><a href="'.wl($ID, 'do=admin&amp;page=config').'">'.$menu['config']['prompt'].'</a></div>');
-        }else{
-            ptln('&nbsp');
-        }
-        ptln('  </div>');
-        ptln('  <div id="admin__version">');
-        ptln('    <div><b>'.$this->getLang('wiki_version').'</b><br/>'.getVersion().'</div>');
-        ptln('    <div><b>'.$this->getLang('php_version').'</b><br/>'.phpversion().'</div>');
-        ptln('  </div>');
-        ptln('</div>');
+        print p_locale_xhtml('admin');
 
-        // remove the four main plugins
+        if ($INFO['isadmin']){
+        ptln('<ul class="admin_tasks">');
+
+        if($menu['usermanager'] && $auth && $auth->canDo('getUsers')){
+            ptln('  <li class="admin_usermanager"><div class="li">'.
+                    '<a href="'.wl($ID, array('do' => 'admin','page' => 'usermanager')).'">'.
+                    $menu['usermanager']['prompt'].'</a></div></li>');
+        }
+        unset($menu['usermanager']);
+
+        if($menu['acl']){
+            ptln('  <li class="admin_acl"><div class="li">'.
+                    '<a href="'.wl($ID, array('do' => 'admin','page' => 'acl')).'">'.
+                    $menu['acl']['prompt'].'</a></div></li>');
+        }
         unset($menu['acl']);
-        if ($usermanageravailable) unset($menu['usermanager']);
-        unset($menu['config']);
-        unset($menu['plugin']);
-  
-        // output the remaining menu
-        usort($menu, 'p_sort_modes');
-        ptln('<h2>'.$this->getLang('more_adminheader').'</h2>');
-        ptln('<div class="level2">');
-        echo $this->render($this->getLang('more_admintext'));
-        ptln('<ul id="admin__pluginlist">');
-        foreach ($menu as $item) {
-          if (!$item['prompt']) continue;
-          ptln('  <li class="level1"><div class="li"><a href="'.wl($ID, 'do=admin&amp;page='.$item['plugin']).'">'.$item['prompt'].'</a></div></li>');
+
+        if($menu['extension']){
+            ptln('  <li class="admin_plugin"><div class="li">'.
+                    '<a href="'.wl($ID, array('do' => 'admin','page' => 'extension')).'">'.
+                    $menu['extension']['prompt'].'</a></div></li>');
         }
-        ptln('</ul></div>');
+        unset($menu['extension']);
+
+        if($menu['config']){
+            ptln('  <li class="admin_config"><div class="li">'.
+                    '<a href="'.wl($ID, array('do' => 'admin','page' => 'config')).'">'.
+                    $menu['config']['prompt'].'</a></div></li>');
+        }
+        unset($menu['config']);
+    }
+        ptln('</ul>');
+
+
+        // Manager Tasks
+    ptln('<ul class="admin_tasks">');
+
+    if($menu['revert']){
+        ptln('  <li class="admin_revert"><div class="li">'.
+                '<a href="'.wl($ID, array('do' => 'admin','page' => 'revert')).'">'.
+                $menu['revert']['prompt'].'</a></div></li>');
+    }
+    unset($menu['revert']);
+
+    if($menu['popularity']){
+        ptln('  <li class="admin_popularity"><div class="li">'.
+                '<a href="'.wl($ID, array('do' => 'admin','page' => 'popularity')).'">'.
+                $menu['popularity']['prompt'].'</a></div></li>');
+    }
+    unset($menu['popularity']);
+
+        ptln('</ul>');
+
+        // print DokuWiki version:
+        echo '<div id="admin__version">';
+        echo getVersion();
+        ptln('    <div><b>'.$this->getLang('php_version').'</b> '.phpversion().'</div>');
+        echo '</div>';
+        ptln('<div class="clearer"></div>');
+
+
+        // print the rest as sorted list
+    if(count($menu)){
+        usort($menu, 'p_sort_modes');
+        // output the menu
+        print p_locale_xhtml('adminplugins');
+        ptln('<ul>');
+        foreach ($menu as $item) {
+            if (!$item['prompt']) continue;
+            ptln('  <li><div class="li"><a href="'.wl($ID, 'do=admin&amp;page='.$item['plugin']).'">'.$item['prompt'].'</a></div></li>');
+        }
+        ptln('</ul>');
     }
 
 }

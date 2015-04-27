@@ -68,7 +68,7 @@ class action_plugin_adminhomepage extends DokuWiki_Action_Plugin {
         //   has protection to prevent the webserver serving files from it
         if (substr($conf['savedir'],0,2) == './'){
             echo '<a style="border:none; float:right;"
-                href="http://www.dokuwiki.org/security#web_access_security">
+                href="https://www.dokuwiki.org/security#web_access_security">
                 <img src="'.DOKU_URL.$conf['savedir'].'/security.png" alt="Your data directory seems to be protected properly."
                 onerror="this.parentNode.style.display=\'none\'" /></a>';
         }

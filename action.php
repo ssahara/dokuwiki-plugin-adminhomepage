@@ -92,19 +92,27 @@ class action_plugin_adminhomepage extends DokuWiki_Action_Plugin {
             }
             unset($menu['acl']);
 
-            if($menu['extension']){
+            if ($menu['extension2']){
                 ptln('  <li class="admin_plugin"><div class="li">'.
-                    '<a href="'.wl($ID, array('do' => 'admin','page' => 'extension')).'">'.
-                    $menu['extension']['prompt'].'</a></div></li>');
+                        '<a href="'.wl($ID, array('do' => 'admin','page' => 'extension2')).'">'.
+                        $menu['extension2']['prompt'].'</a></div></li>');
             }
-            unset($menu['extension']);
+            unset($menu['extension2']);
 
-            if($menu['config']){
+            if ($menu['config']){
                 ptln('  <li class="admin_config"><div class="li">'.
-                    '<a href="'.wl($ID, array('do' => 'admin','page' => 'config')).'">'.
-                    $menu['config']['prompt'].'</a></div></li>');
+                        '<a href="'.wl($ID, array('do' => 'admin','page' => 'config')).'">'.
+                        $menu['config']['prompt'].'</a></div></li>');
             }
             unset($menu['config']);
+
+            // 設定ファイルの更新（内容変更なし）
+            if ($menu['toucher']){
+                ptln('  <li class="admin_config"><div class="li">'.
+                        '<a href="'.wl($ID, array('do' => 'admin','page' => 'toucher')).'">'.
+                        $menu['toucher']['prompt'].'</a></div></li>');
+            }
+            unset($menu['toucher']);
         }
         ptln('</ul>');
 
@@ -126,7 +134,16 @@ class action_plugin_adminhomepage extends DokuWiki_Action_Plugin {
         }
         unset($menu['popularity']);
 
+        // リダイレクトマネージャー
+        if ($menu['redirect2']){
+                ptln('  <li class="admin_config"><div class="li">'.
+                        '<a href="'.wl($ID, array('do' => 'admin','page' => 'redirect2')).'">'.
+                        $menu['redirect2']['prompt'].'</a></div></li>');
+        }
+        unset($menu['redirect2']);
+
         ptln('</ul>');
+
 
         // print DokuWiki version:
         echo '<div id="admin__version">';

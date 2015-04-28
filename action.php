@@ -50,7 +50,7 @@ class action_plugin_adminhomepage extends DokuWiki_Action_Plugin {
         $pluginlist = plugin_list('admin');
         $menu = array();
         foreach ($pluginlist as $p) {
-            if($obj =& plugin_load('admin',$p) === NULL) continue;
+            if($obj = plugin_load('admin',$p) === NULL) continue;
 
             // check permissions
             if($obj->forAdminOnly() && !$INFO['isadmin']) continue;
@@ -78,53 +78,54 @@ class action_plugin_adminhomepage extends DokuWiki_Action_Plugin {
         if ($INFO['isadmin']){
             ptln('<ul class="admin_tasks">');
 
-            if($menu['usermanager'] && $auth && $auth->canDo('getUsers')){
+            if ($menu['usermanager'] && $auth && $auth->canDo('getUsers')){
                 ptln('  <li class="admin_usermanager"><div class="li">'.
-                    '<a href="'.wl($ID, array('do' => 'admin','page' => 'usermanager')).'">'.
-                    $menu['usermanager']['prompt'].'</a></div></li>');
+                     '<a href="'.wl($ID, array('do' => 'admin','page' => 'usermanager')).'">'.
+                     $menu['usermanager']['prompt'].'</a></div></li>');
+                unset($menu['usermanager']);
             }
-            unset($menu['usermanager']);
 
-            if($menu['acl']){
+            if ($menu['acl']){
                 ptln('  <li class="admin_acl"><div class="li">'.
-                    '<a href="'.wl($ID, array('do' => 'admin','page' => 'acl')).'">'.
-                    $menu['acl']['prompt'].'</a></div></li>');
+                     '<a href="'.wl($ID, array('do' => 'admin','page' => 'acl')).'">'.
+                     $menu['acl']['prompt'].'</a></div></li>');
+                unset($menu['acl']);
             }
-            unset($menu['acl']);
 
-            if($menu['extension']){
+            if ($menu['extension']){
                 ptln('  <li class="admin_plugin"><div class="li">'.
-                    '<a href="'.wl($ID, array('do' => 'admin','page' => 'extension')).'">'.
-                    $menu['extension']['prompt'].'</a></div></li>');
+                     '<a href="'.wl($ID, array('do' => 'admin','page' => 'extension')).'">'.
+                     $menu['extension']['prompt'].'</a></div></li>');
+                unset($menu['extension']);
             }
-            unset($menu['extension']);
 
-            if($menu['config']){
+            if ($menu['config']){
                 ptln('  <li class="admin_config"><div class="li">'.
-                    '<a href="'.wl($ID, array('do' => 'admin','page' => 'config')).'">'.
-                    $menu['config']['prompt'].'</a></div></li>');
+                     '<a href="'.wl($ID, array('do' => 'admin','page' => 'config')).'">'.
+                     $menu['config']['prompt'].'</a></div></li>');
+                unset($menu['config']);
             }
-            unset($menu['config']);
         }
+
         ptln('</ul>');
 
 
         // Manager Tasks
         ptln('<ul class="admin_tasks">');
 
-        if($menu['revert']){
+        if ($menu['revert']){
             ptln('  <li class="admin_revert"><div class="li">'.
-                '<a href="'.wl($ID, array('do' => 'admin','page' => 'revert')).'">'.
-                $menu['revert']['prompt'].'</a></div></li>');
+                 '<a href="'.wl($ID, array('do' => 'admin','page' => 'revert')).'">'.
+                 $menu['revert']['prompt'].'</a></div></li>');
+            unset($menu['revert']);
         }
-        unset($menu['revert']);
 
-        if($menu['popularity']){
+        if ($menu['popularity']){
             ptln('  <li class="admin_popularity"><div class="li">'.
-                '<a href="'.wl($ID, array('do' => 'admin','page' => 'popularity')).'">'.
-                $menu['popularity']['prompt'].'</a></div></li>');
+                 '<a href="'.wl($ID, array('do' => 'admin','page' => 'popularity')).'">'.
+                 $menu['popularity']['prompt'].'</a></div></li>');
+            unset($menu['popularity']);
         }
-        unset($menu['popularity']);
 
         ptln('</ul>');
 

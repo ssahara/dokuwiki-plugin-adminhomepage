@@ -2,6 +2,6 @@ base  adminhomepage
 name  Admin home page
 author Håkan Sandell
 email  hakan.sandell@home.se
-date   2015-04-27
+date   2015-04-28
 desc   Design your favorite "Admin" page.
 url    https://www.dokuwiki.org/plugin:adminhomepage

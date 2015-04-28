@@ -50,7 +50,7 @@ class action_plugin_adminhomepage extends DokuWiki_Action_Plugin {
         $pluginlist = plugin_list('admin');
         $menu = array();
         foreach ($pluginlist as $p) {
-            if($obj = plugin_load('admin',$p) === NULL) continue;
+            if (($obj = plugin_load('admin',$p)) === NULL) continue;
 
             // check permissions
             if($obj->forAdminOnly() && !$INFO['isadmin']) continue;

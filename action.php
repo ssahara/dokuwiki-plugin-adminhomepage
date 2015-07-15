@@ -22,7 +22,7 @@ class action_plugin_adminhomepage extends DokuWiki_Action_Plugin {
     /**
      * Looks for admin action, if found the name is changed so TPL_ACT_UNKNOWN is raised
      */
-    function handle_act_preprocess(&$event, $param) {
+    function handle_act_preprocess(Doku_Event $event, $param) {
         if (($event->data == 'admin') && empty($_REQUEST['page']) && (act_permcheck($event->data) == 'admin')) {
             $event->data = 'adminhomepage';
             $event->stopPropagation();
@@ -33,7 +33,7 @@ class action_plugin_adminhomepage extends DokuWiki_Action_Plugin {
     /**
      * Catches the "unknown" event "adminhomepage" and outputs the alternative admin main page
      */
-    function handle_act_unknown(&$event, $param) {
+    function handle_act_unknown(Doku_Event $event, $param) {
         if ($event->data == 'adminhomepage') {
             $this->_html_admin();
             $event->stopPropagation();

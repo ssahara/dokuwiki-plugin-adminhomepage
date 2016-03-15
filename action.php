@@ -146,7 +146,19 @@ class action_plugin_adminhomepage extends DokuWiki_Action_Plugin {
         // print DokuWiki version:
         echo '<div id="admin__version">';
         echo getVersion();
+        ptln('    <div><b>OS:</b> '.php_uname('s').' '.php_uname('r').'</div>');
         ptln('    <div><b>'.$this->getLang('php_version').'</b> '.phpversion().'</div>');
+        ptln('    <div><b>LC_CTYPE: </b> '.setlocale(LC_CTYPE, 0).'</div>');
+        if (extension_loaded('mbstring')) {
+            ptln('    <div>mb_internal_encoding '.mb_get_info('internal_encoding').'</div>');
+        } else {
+            ptln('    <div>mbstring not supported</div>');
+        }
+        if (extension_loaded('gd')) {
+            $gdinfo = gd_info();
+            ptln('    <div>GD '.$gdinfo['GD Version'].'</div>');
+        }
+        ptln(    '<div><a href="./phpinfo.php">phpinfo</a></div>');
         echo '</div>';
         ptln('<div class="clearer"></div>');
 

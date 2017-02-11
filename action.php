@@ -15,8 +15,10 @@ class action_plugin_adminhomepage extends DokuWiki_Action_Plugin {
      * register the eventhandlers
      */
     function register(Doku_Event_Handler $controller) {
-        $controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, 'handle_act_preprocess');
-        $controller->register_hook('TPL_ACT_UNKNOWN', 'BEFORE', $this, 'handle_act_unknown');
+        if ($this->getConf('enable_homepage')) {
+            $controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, 'handle_act_preprocess');
+            $controller->register_hook('TPL_ACT_UNKNOWN', 'BEFORE', $this, 'handle_act_unknown');
+        }
     }
 
     /**
